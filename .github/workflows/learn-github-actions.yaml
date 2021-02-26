@@ -1,4 +1,4 @@
-name: learn-github-actions
+name: Check CLA
 on:
   issues:
     types: [opened, edited, milestoned]
