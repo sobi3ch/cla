@@ -14,7 +14,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
-            Thank you ${{ github.event.pull_request.user.login }} for your ${{ github.event.action }}. Please sign your CLA.
+            Thank you ${{ github.event.pull_request.user.login }} for creating your ${{ github.event.action }}. Please sign your CLA.
             event name: ${{ github.event_name }}
 
       - name: Create comment
@@ -22,10 +22,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            This is a multi-line test comment
-            - With GitHub **Markdown** :sparkles:
-            - Created by [create-or-update-comment][1]
-
-            [1]: https://github.com/peter-evans/create-or-update-comment
-          reactions: '+1'
-
+            Thank you ${{ github.event.pull_request.user.login }} for creating your ${{ github.event_name }}. Please sign your CLA.
