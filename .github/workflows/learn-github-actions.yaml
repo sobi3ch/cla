@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: mshick/add-pr-comment@v1
         with:
-          repo-token: ${{ gitub.token }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           message: |
             Please sign CLA first
       - uses: peter-evans/create-or-update-comment@v1
