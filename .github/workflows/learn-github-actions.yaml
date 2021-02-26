@@ -7,7 +7,7 @@ on:
 jobs:
   check-contributors:
     env:
-      GLOBAL_MSG: "Thank you {0} for creating your this {1}. Please sign your CLA."
+      GLOBAL_MSG: "Message with XX to replace"
     runs-on: ubuntu-latest
     steps:
       # - name: Add comment PR
@@ -26,7 +26,6 @@ jobs:
         with:
           body: |
             Thank you ${{ github.event.pull_request.user.login }} for creating your this PR. Please sign your CLA.
-            global message: ${{ env.GLOBAL_MSG }}
 
       - name: Add ISSUE comment
         if: github.event_name == 'issues'
@@ -34,4 +33,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            ${{ format(${{ env.GLOBAL_MSG }}, ${{ github.event.issue.user.login }}, 'issue') }}
+            Thank you ${{ github.event.issue.user.login }} for creating your this issue. Please sign your CLA.
