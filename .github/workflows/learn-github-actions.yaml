@@ -7,17 +7,25 @@ on:
 jobs:
   check-contributors:
     env:
-      GLOBAL_MSG: "Message with XX to replace"
+      GLOBAL_MSG: "Thank you {0} for creating your this {1}. Please sign your CLA."
     runs-on: ubuntu-latest
     steps:
-      - name: Add comment PR
+      # - name: Add comment PR
+      #   if: github.event_name == 'pull_request'
+      #   uses: mshick/add-pr-comment@v1
+      #   with:
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #     repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
+      #     message: |
+      #       Thank you ${{ github.event.pull_request.user.login }} for creating this PR. Please sign your CLA.
+      #       global message: ${{ env.GLOBAL_MSG }}
+
+      - name: Add PR comment
         if: github.event_name == 'pull_request'
-        uses: mshick/add-pr-comment@v1
+        uses: peter-evans/create-or-update-comment@v1
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
-          message: |
-            Thank you ${{ github.event.pull_request.user.login }} for creating this PR. Please sign your CLA.
+          body: |
+            Thank you ${{ github.event.pull_request.user.login }} for creating your this PR. Please sign your CLA.
             global message: ${{ env.GLOBAL_MSG }}
 
       - name: Add ISSUE comment
@@ -26,5 +34,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Thank you ${{ github.event.issue.user.login }} for creating your this issue. Please sign your CLA.
-            global message: ${{ env.GLOBAL_MSG }}
+            ${{ format(${{ env.GLOBAL_MSG }}, ${{ github.event.issue.user.login }}, 'issue') }}
