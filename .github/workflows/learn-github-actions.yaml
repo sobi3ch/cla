@@ -10,8 +10,17 @@ jobs:
       GLOBAL_MSG: "Message with XX to replace"
     runs-on: ubuntu-latest
     steps:
-      - name: Add comment PR
-        if: github.event_name == 'pull_request'
+      - name: Check CONTRIBUTORS
+        uses: actions/checkout@v2.3.4
+        with:
+          name: ockam-network/contributors
+          path: contributors
+        run: |
+          ls -l contributors/CONTRIBUTORS.csv
+          grep sobi3ch contributors/CONTRIBUTORS.csv
+          grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
+
+      - name: Add comment CLA
         uses: mshick/add-pr-comment@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
