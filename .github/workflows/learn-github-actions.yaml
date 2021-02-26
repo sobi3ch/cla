@@ -13,4 +13,5 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
-            Please sign CLA first
+            Thank you ${{ github.event.pull_request.user.login }} for PR. Please sign your CLA.
+
