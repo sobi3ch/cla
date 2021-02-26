@@ -18,9 +18,12 @@ jobs:
 
       - name: Check CONTRIBUTORS
         run: |
-          ls -l contributors/CONTRIBUTORS.csv
-          grep sobi3ch contributors/CONTRIBUTORS.csv
-          grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
+          whoami
+          pwd
+          ls -l .
+          # ls -l contributors/CONTRIBUTORS.csv
+          # grep sobi3ch contributors/CONTRIBUTORS.csv
+          # grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
 
       - name: Add comment CLA
         uses: mshick/add-pr-comment@v1
