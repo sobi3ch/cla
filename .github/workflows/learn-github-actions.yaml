@@ -18,7 +18,7 @@ jobs:
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
             Thank you ${{ github.event.pull_request.user.login }} for creating this PR. Please sign your CLA.
-            global message: ${{ GLOBAL_MSG }}
+            global message: ${{ env.GLOBAL_MSG }}
 
       - name: Add ISSUE comment
         if: github.event_name == 'issues'
@@ -27,4 +27,4 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             Thank you ${{ github.event.issue.user.login }} for creating your this issue. Please sign your CLA.
-            global message: ${{ GLOBAL_MSG }}
+            global message: ${{ env.GLOBAL_MSG }}
