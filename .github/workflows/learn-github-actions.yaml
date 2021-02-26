@@ -6,6 +6,8 @@ on:
     types: [assigned, opened, synchronize, reopened]
 jobs:
   check-contributors:
+    env:
+      GLOBAL_MSG: "Message with XX to replace"
     runs-on: ubuntu-latest
     steps:
       - name: Add comment PR
@@ -15,8 +17,8 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
-            Thank you ${{ github.event.pull_request.user.login }} for creating your ${{ github.event.action }}. Please sign your CLA.
-            event name: ${{ github.event_name }}
+            Thank you ${{ github.event.pull_request.user.login }} for creating this PR. Please sign your CLA.
+            global message: ${{ GLOBAL_MSG }}
 
       - name: Add ISSUE comment
         if: github.event_name == 'issues'
@@ -24,4 +26,5 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Thank you ${{ github.event.pull_request.user.login }} for creating your ${{ github.event_name }}. Please sign your CLA.
+            Thank you ${{ github.event.issue.user.login }} for creating your this issue. Please sign your CLA.
+            global message: ${{ GLOBAL_MSG }}
