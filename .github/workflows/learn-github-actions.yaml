@@ -13,7 +13,7 @@ jobs:
       - name: Clone CONTRIBUTORS
         uses: actions/checkout@v2.3.4
         with:
-          name: ockam-network/contributors
+          repository: ockam-network/contributors
           path: contributors
 
       - name: Check CONTRIBUTORS
