@@ -8,11 +8,24 @@ jobs:
   check-contributors:
     runs-on: ubuntu-latest
     steps:
-      - uses: mshick/add-pr-comment@v1
+      - name: Add comment CLA
+        uses: mshick/add-pr-comment@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
             Thank you ${{ github.event.pull_request.user.login }} for your ${{ github.event.action }}. Please sign your CLA.
             event name: ${{ github.event_name }}
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            This is a multi-line test comment
+            - With GitHub **Markdown** :sparkles:
+            - Created by [create-or-update-comment][1]
+
+            [1]: https://github.com/peter-evans/create-or-update-comment
+          reactions: '+1'
 
