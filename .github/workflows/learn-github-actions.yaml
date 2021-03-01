@@ -61,7 +61,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
 
       - name: Add PR comment
-        if: env.CLA_NOT_SIGNED && github.event_name == 'pull_request'
+        if: env.CLA_NOT_SIGNED == 1  &&  github.event_name == 'pull_request'
         uses: mshick/add-pr-comment@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +70,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
             ${{ env.MESSAGE }}
 
       - name: Add ISSUE comment
-        if: env.CLA_NOT_SIGNED && github.event_name == 'issues'
+        if: env.CLA_NOT_SIGNED == 1  &&  github.event_name == 'issues'
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
