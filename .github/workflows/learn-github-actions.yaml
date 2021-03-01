@@ -33,7 +33,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           OUTPUT=$(echo $GLOBAL_MSG | sed "s#<EVENT>#$EVENT#g")
           echo "GLOBAL_MSG=$OUTPUT" >> $GITHUB_ENV
           echo "this PR user: ${{ github.event.pull_request.user.login }} eeeee"
-          ECHO "TRUE EVENT: $TEVENT"
+          echo "TRUE EVENT: $TEVENT"
 
       - name: Add comment CLA
         uses: mshick/add-pr-comment@v1
