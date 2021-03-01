@@ -7,7 +7,8 @@ on:
 jobs:
   check-contributors:
     env:
-      GLOBAL_MSG: "Original message with XX to replace"
+      GLOBAL_MSG: "Thank you <USER> for creating this <EVENT>. Before you continue you will need to sign our CLA.
+To do it please create a new PR to the https://github.com/ockam-network/contributors repo adding yourself to the CSV file."
     runs-on: ubuntu-latest
     steps:
       - name: Clone CONTRIBUTORS
@@ -23,8 +24,16 @@ jobs:
           ls -l contributors/
           grep sobi3ch contributors/CONTRIBUTORS.csv
           grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
-          OUTPUT=$(echo $GLOBAL_MSG | sed 's#XX#SOMTHING#g')
-          echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
+
+      - name: Prepare message
+        # ${{ github.event.issue.user.login }}
+        run: |
+          TEVENT=${{ github.event_name }}
+          EVENT=issue
+          OUTPUT=$(echo $GLOBAL_MSG | sed "s#<EVENT>#$EVENT#g")
+          echo "GLOBAL_MSG=$OUTPUT" >> $GITHUB_ENV
+          echo "this PR user: ${{ github.event.pull_request.user.login }} eeeee"
+          ECHO "TRUE EVENT: $TEVENT"
 
       - name: Add comment CLA
         uses: mshick/add-pr-comment@v1
@@ -32,8 +41,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
-            Thank you ${{ github.event.pull_request.user.login }} for creating this PR. Please sign your CLA.
-            Overwrite GLOBAL message: ${{ env.MESSAGE }}
+            ${{ env.GLOBAL_MSG }}
 
       # - name: Add PR comment
       #   if: github.event_name == 'pull_request'
@@ -48,6 +56,4 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Thank you ${{ github.event.issue.user.login }} for creating this issue. Before you continue you will need to sign our CLA.
-            To do it please create a new PR to the https://github.com/ockam-network/contributors repo adding yourself to the CSV file.
-            Overwrite GLOBAL message: ${{ env.MESSAGE }}
+            ${{ env.GLOBAL_MSG }}
