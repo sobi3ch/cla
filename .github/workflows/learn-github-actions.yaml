@@ -36,6 +36,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
 
       - name: Check submitter
         continue-on-error: true
+        shell: bash
         run: |
           set -x
           # Below attempt is to prevent following situation
@@ -46,7 +47,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           then
             echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
           else
-            echo "CLA_NOT_SIGNED=0" >> $GITHUB_ENV
+            echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
             # CVS_USER=$(grep --max-count=1 --only-matching ${{ env.USER }} contributors/CONTRIBUTORS.csv)
             # if [ "$CVS_USER" == "${{ env.USER }}" ]
             # then 
@@ -56,7 +57,6 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
             # fi
           fi
           echo "CLA_NOT_SIGNED: ${{ env.CLA_NOT_SIGNED }} eee"
-          echo "CLA_NOT_SIGNED=0" >> $GITHUB_ENV
 
       - name: Prepare message
         if: env.CLA_NOT_SIGNED == 1
