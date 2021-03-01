@@ -23,6 +23,7 @@ jobs:
           ls -l contributors/
           grep sobi3ch contributors/CONTRIBUTORS.csv
           grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
+          GLOBAL_MSG="overwrite global message"
 
       - name: Add comment CLA
         uses: mshick/add-pr-comment@v1
@@ -31,6 +32,7 @@ jobs:
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
             Thank you ${{ github.event.pull_request.user.login }} for creating this PR. Please sign your CLA.
+            Overwrite GLOBAL message: ${{ env.GLOBAL_MSG }}
 
       # - name: Add PR comment
       #   if: github.event_name == 'pull_request'
@@ -45,4 +47,6 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Thank you ${{ github.event.issue.user.login }} for creating your this issue. Please sign your CLA.
+            Thank you ${{ github.event.issue.user.login }} for creating this issue. Before you continue you will need to sign our CLA.
+            To do it please create a new PR to the https://github.com/ockam-network/contributors repo adding yourself to the CSV file.
+            Overwrite GLOBAL message: ${{ env.GLOBAL_MSG }}
