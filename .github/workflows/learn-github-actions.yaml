@@ -1,9 +1,9 @@
 name: Check CLA
 on:
   issues:
-    types: [opened, edited, milestoned]
+    types: [opened]
   pull_request:
-    types: [assigned, opened, synchronize, reopened]
+    types: [opened]
 jobs:
   check-submitter-for-cla:
     name: Check submitter for CLA
@@ -38,7 +38,6 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
         continue-on-error: true
         shell: bash
         run: |
-          set -x
           # Below attempt is to prevent following situation
           # https://github.community/t/github-actions-using-grep-when-no-lines-selected/126719
           CVS_USER=$(grep --max-count=1 --only-matching ${{ env.USER }} contributors/CONTRIBUTORS.csv || echo '<MISSING>')
@@ -54,13 +53,6 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
       - name: Prepare message
         if: env.CLA_NOT_SIGNED == 1
         run: |
-          echo "env.CLA_NOT_SIGNED: ${{ env.CLA_NOT_SIGNED }}"
-          if [ ${{ env.CLA_NOT_SIGNED }} -eq 0 ] 
-          then
-            echo 'cla signed'
-          else 
-            echo 'cla NOT signed'
-          fi
           OUTPUT=$(echo $MESSAGE | sed -e "s#<USER>#$USER#g" -e "s#<EVENT>#$EVENT#g")
           echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
 
