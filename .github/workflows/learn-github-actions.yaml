@@ -35,12 +35,11 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           echo "EVENT=$EVENT" >> $GITHUB_ENV
 
       - name: Check submitter
-        continue-on-error: true
         run: |
           CVS_USER=$(grep --max-count=1 --only-matching $USER contributors/CONTRIBUTORS.csv)
           STATUS=$?
 
-          if [ ${STATUS} -eq 0 ] && [ "${CVS_USER}" = "${USER}" ]
+          if [ ${STATUS} -eq 0 ] && [ "${CVS_USER}" = "${{ env.USER }}" ]
           then
             echo "INFO: User $USER signed the CLA"
             echo "CLA_NOT_SIGNED=0" >> $GITHUB_ENV
