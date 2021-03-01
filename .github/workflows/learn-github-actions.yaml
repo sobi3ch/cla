@@ -45,7 +45,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           if [ "$CVS_USER" == true ]
           then
             echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
-          elif
+          else
             CVS_USER=$(grep --max-count=1 --only-matching ${{ env.USER }} contributors/CONTRIBUTORS.csv)
             if [ "$CVS_USER" == "${{ env.USER }}" ]
             then 
