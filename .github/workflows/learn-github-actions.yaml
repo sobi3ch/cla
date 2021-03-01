@@ -26,29 +26,28 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
 
       - name: Prepare message
-        # ${{ github.event.issue.user.login }}
         run: |
-          TEVENT=${{ github.event_name }}
-          EVENT=issue
-          OUTPUT=$(echo $GLOBAL_MSG | sed "s#<EVENT>#$EVENT#g")
-          echo "GLOBAL_MSG=$OUTPUT" >> $GITHUB_ENV
-          echo "this PR user: ${{ github.event.pull_request.user.login }} eeeee"
-          echo "TRUE EVENT: $TEVENT"
+          if [ ${{ github.event_name }} = "issues" ]; then
+            USER=${{ github.event.issue.user.login }}
+            EVENT=issue
+          else
+            USER=${{ github.event.pull_request.user.login }}
+            EVENT=PR
+          fi
+          OUTPUT=$(echo $MESSAGE | sed -e "s#<USER>#$USER#g" -e "s#<EVENT>#$EVENT#g")
 
-      - name: Add comment CLA
+          # Export variable
+          # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+          echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
+
+      - name: Add PR comment
+        if: github.event_name == 'pull_request'
         uses: mshick/add-pr-comment@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           repo-token-user-login: 'Ockam[bot]' # The user.login for temporary GitHub tokens
           message: |
-            ${{ env.GLOBAL_MSG }}
-
-      # - name: Add PR comment
-      #   if: github.event_name == 'pull_request'
-      #   uses: peter-evans/create-or-update-comment@v1
-      #   with:
-      #     body: |
-      #       Thank you ${{ github.event.pull_request.user.login }} for creating your this PR. Please sign your CLA.
+            ${{ env.MESSAGE }}
 
       - name: Add ISSUE comment
         if: github.event_name == 'issues'
@@ -56,4 +55,4 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            ${{ env.GLOBAL_MSG }}
+            ${{ env.MESSAGE }}
