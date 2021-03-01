@@ -7,7 +7,7 @@ on:
 jobs:
   check-contributors:
     env:
-      GLOBAL_MSG: "Thank you <USER> for creating this <EVENT>. Before you continue you will need to sign our CLA.
+      MESSAGE: "Thank you <USER> for creating this <EVENT>. Before you continue you will need to sign our CLA.
 To do it please create a new PR to the https://github.com/ockam-network/contributors repo adding yourself to the CSV file."
     runs-on: ubuntu-latest
     steps:
