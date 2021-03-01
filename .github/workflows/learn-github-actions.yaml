@@ -42,14 +42,21 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           if [ ${STATUS} -eq 0 ] && [ "${CVS_USER}" = "${USER}" ]
           then
             echo "INFO: User $USER signed the CLA"
-            echo "CLA_NOT_SIGNED=false" >> $GITHUB_ENV
+            echo "CLA_NOT_SIGNED=0" >> $GITHUB_ENV
           else
-            echo "CLA_NOT_SIGNED=true" >> $GITHUB_ENV
+            echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
           fi
 
       - name: Prepare message
         if: env.CLA_NOT_SIGNED
         run: |
+          echo "env.CLA_NOT_SIGNED: ${{ env.CLA_NOT_SIGNED }}"
+          if [ ${{ env.CLA_NOT_SIGNED }} -eq 0 ] 
+          then
+            echo 'cla signed'
+          else 
+            echo 'cla NOT signed'
+          fi
           OUTPUT=$(echo $MESSAGE | sed -e "s#<USER>#$USER#g" -e "s#<EVENT>#$EVENT#g")
           echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
 
