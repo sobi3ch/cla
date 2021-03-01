@@ -15,7 +15,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
       - name: Clone CONTRIBUTORS
         uses: actions/checkout@v2.3.4
         with:
-          repository: ockam-network/contributors
+          repository: sobi3ch/contributors
           path: contributors
 
       # Gather necessary information
