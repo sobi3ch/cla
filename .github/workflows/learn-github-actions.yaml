@@ -48,7 +48,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           fi
 
       - name: Prepare message
-        if: env.CLA_NOT_SIGNED
+        if: env.CLA_NOT_SIGNED == 1
         run: |
           echo "env.CLA_NOT_SIGNED: ${{ env.CLA_NOT_SIGNED }}"
           if [ ${{ env.CLA_NOT_SIGNED }} -eq 0 ] 
