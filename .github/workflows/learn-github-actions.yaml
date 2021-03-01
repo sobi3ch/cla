@@ -5,7 +5,8 @@ on:
   pull_request:
     types: [assigned, opened, synchronize, reopened]
 jobs:
-  check-contributors:
+  check-submitter-for-cla:
+    name: Check submitter for CLA
     env:
       MESSAGE: "Thank you <USER> for creating this <EVENT>. Before you continue you will need to sign our CLA.
 To do it please create a new PR to the https://github.com/ockam-network/contributors repo adding yourself to the CSV file."
@@ -17,15 +18,8 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           repository: ockam-network/contributors
           path: contributors
 
-      - name: Check CONTRIBUTORS
-        run: |
-          whoami
-          pwd
-          ls -l contributors/
-          grep sobi3ch contributors/CONTRIBUTORS.csv
-          grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
-
-      - name: Prepare message
+      # Gather necessary information
+      - name: Setup
         run: |
           if [ ${{ github.event_name }} = "issues" ]; then
             USER=${{ github.event.issue.user.login }}
@@ -34,14 +28,32 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
             USER=${{ github.event.pull_request.user.login }}
             EVENT=PR
           fi
-          OUTPUT=$(echo $MESSAGE | sed -e "s#<USER>#$USER#g" -e "s#<EVENT>#$EVENT#g")
 
           # Export variable
           # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+          echo "USER=$USER" >> $GITHUB_ENV
+          echo "EVENT=$EVENT" >> $GITHUB_ENV
+
+      - name: Check submitter
+        run: |
+          CVS_USER=$(grep --max-count=1 --only-matching $USER contributors/CONTRIBUTORS.csv)
+          STATUS=$?
+          if [ ${STATUS} -eq 0 ] && [ $CVS_USER = "$USER" ]
+          then {
+            echo "INFO: User $USER signed the CLA"
+          }
+          else {
+            echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
+          }
+
+      - name: Prepare message
+        if: ${{ CLA_NOT_SIGNED }}
+        run: |
+          OUTPUT=$(echo $MESSAGE | sed -e "s#<USER>#$USER#g" -e "s#<EVENT>#$EVENT#g")
           echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
 
       - name: Add PR comment
-        if: github.event_name == 'pull_request'
+        if: (${{ CLA_NOT_SIGNED }}) && (github.event_name == 'pull_request')
         uses: mshick/add-pr-comment@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +62,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
             ${{ env.MESSAGE }}
 
       - name: Add ISSUE comment
-        if: github.event_name == 'issues'
+        if: (${{ CLA_NOT_SIGNED }}) && (github.event_name == 'issues')
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.issue.number }}
