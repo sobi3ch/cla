@@ -42,7 +42,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           # https://github.community/t/github-actions-using-grep-when-no-lines-selected/126719
           CVS_USER=$(grep ${{ env.USER }} contributors/CONTRIBUTORS.csv || true)
 
-          if [[ $CVS_USER -eq true ]]
+          if [ -z "$CVS_USER" -eq true ]]
           then
             echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
           else
@@ -55,7 +55,7 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
             #   echo "WARNING: something goes wrong"
             # fi
           fi
-          echo "CLA_NOT_SIGNED: $CLA_NOT_SIGNED"
+          echo "CLA_NOT_SIGNED: ${{env.CLA_NOT_SIGNED}}"
           echo "CLA_NOT_SIGNED=0" >> $GITHUB_ENV
 
       - name: Prepare message
