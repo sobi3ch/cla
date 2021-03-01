@@ -7,7 +7,7 @@ on:
 jobs:
   check-contributors:
     env:
-      GLOBAL_MSG: "Message with XX to replace"
+      GLOBAL_MSG: "Original message with XX to replace"
     runs-on: ubuntu-latest
     steps:
       - name: Clone CONTRIBUTORS
@@ -23,7 +23,7 @@ jobs:
           ls -l contributors/
           grep sobi3ch contributors/CONTRIBUTORS.csv
           grep sobi3ch contributors/CONTRIBUTORS.csv | cut -d',' -f1
-          GLOBAL_MSG="overwrite global message"
+          ::set-env name=GLOBAL_MSG::"OVERWRITEN global message"
 
       - name: Add comment CLA
         uses: mshick/add-pr-comment@v1
