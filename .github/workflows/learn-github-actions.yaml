@@ -38,12 +38,19 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
         continue-on-error: true
         run: |
           set -x
-          grep --max-count=1 --only-matching ${{ env.USER }} contributors/CONTRIBUTORS.csv
-          STATUS=$?
-          if [ $STATUS -eq 0 ] && [ "$CVS_USER" == "${{ env.USER }}" ]
+          # Prevent following situation
+          # https://github.community/t/github-actions-using-grep-when-no-lines-selected/126719
+          COUNT=$(grep --count ${{ env.USER }} contributors/CONTRIBUTORS.csv)
+
+          if [ $COUNT -gt 0 ] 
+          # If there is a result
           then
-            echo "INFO: User $USER signed the CLA"
-            echo "CLA_NOT_SIGNED=0" >> $GITHUB_ENV
+            CVS_USER=$(grep --max-count=1 --only-matching ${{ env.USER }} contributors/CONTRIBUTORS.csv)
+            if [ "$CVS_USER" == "${{ env.USER }}" ]
+            then 
+              echo "INFO: User $USER signed the CLA"
+              echo "CLA_NOT_SIGNED=0" >> $GITHUB_ENV
+            fi
           else
             echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
           fi
