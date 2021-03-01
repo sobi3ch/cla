@@ -38,13 +38,13 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
         run: |
           CVS_USER=$(grep --max-count=1 --only-matching $USER contributors/CONTRIBUTORS.csv)
           STATUS=$?
-          if [ ${STATUS} -eq 0 ] && [ $CVS_USER = "$USER" ]
-          then {
+
+          if [ ${STATUS} -eq 0 ] && [ "${CVS_USER}" = "${USER}" ]
+          then
             echo "INFO: User $USER signed the CLA"
-          }
-          else {
+          else
             echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
-          }
+          fi
 
       - name: Prepare message
         if: ${{ env.CLA_NOT_SIGNED }}
