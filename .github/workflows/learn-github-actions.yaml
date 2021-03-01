@@ -38,11 +38,11 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
         continue-on-error: true
         run: |
           set -x
-          # Prevent following situation
+          # Below attempt is to prevent following situation
           # https://github.community/t/github-actions-using-grep-when-no-lines-selected/126719
-          CVS_USER=$(grep ${{ env.USER }} contributors/CONTRIBUTORS.csv || true)
+          CVS_USER=$(grep ${{ env.USER }} contributors/CONTRIBUTORS.csv || echo '<MISSING>')
 
-          if test -z $CVS_USER
+          if [[ "$CVS_USER" == "<MISSING>" ]]
           then
             echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
           else
