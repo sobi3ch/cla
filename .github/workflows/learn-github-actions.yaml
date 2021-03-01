@@ -37,13 +37,8 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
       - name: Check submitter
         continue-on-error: true
         run: |
-          CVS_USER=`grep --max-count=1 --only-matching ${{ env.USER }} contributors/CONTRIBUTORS.csv`
+          grep --max-count=1 --only-matching ${{ env.USER }} contributors/CONTRIBUTORS.csv
           STATUS=$?
-
-      - name: seperated
-        run: |
-          CVS_USER=''
-          STATUS=1
           if [ $STATUS -eq 0 ] && [ "$CVS_USER" == "${{ env.USER }}" ]
           then
             echo "INFO: User $USER signed the CLA"
@@ -51,6 +46,11 @@ To do it please create a new PR to the https://github.com/ockam-network/contribu
           else
             echo "CLA_NOT_SIGNED=1" >> $GITHUB_ENV
           fi
+
+      # - name: seperated
+      #   run: |
+      #     CVS_USER=''
+      #     STATUS=1
 
       - name: Prepare message
         if: env.CLA_NOT_SIGNED == 1
